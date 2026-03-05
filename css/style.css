@@ -1090,3 +1090,14 @@ textarea.invalid {
     color: #4285F4;
     font-size: 1.1rem;
 }
+/* Reviews Footer */
+.reviews-footer {
+    border-top: 1px solid var(--gray-100);
+    padding-top: 40px;
+    margin-top: 60px;
+}
+
+.mb-md { margin-bottom: 16px; }
+.mb-lg { margin-bottom: 24px; }
+.mt-lg { margin-top: 24px; }
+.text-center { text-align: center; }
