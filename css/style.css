@@ -61,6 +61,12 @@ a {
     color: inherit;
 }
 
+a,
+button,
+.btn {
+    touch-action: manipulation;
+}
+
 ul {
     list-style: none;
 }
@@ -269,11 +275,16 @@ img {
     background: rgba(0, 0, 0, 0.5);
     z-index: 150;
     opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.3s ease;
 }
 
 .mobile-nav-overlay.active {
+    display: block;
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 /* Mobile Nav Drawer */
@@ -285,6 +296,8 @@ img {
     height: 100vh;
     background: var(--white);
     z-index: 160;
+    visibility: hidden;
+    pointer-events: none;
     display: flex;
     flex-direction: column;
     padding: 80px 32px 40px;
@@ -295,6 +308,34 @@ img {
 
 .mobile-nav.active {
     right: 0;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+body:not(.menu-open) .mobile-nav-overlay {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body:not(.menu-open) .mobile-nav {
+    right: -100% !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.menu-open .mobile-nav-overlay {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+body.menu-open .mobile-nav {
+    right: 0 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 .mobile-nav-close {
@@ -1049,7 +1090,7 @@ textarea.invalid {
     }
 
     .mobile-nav-overlay {
-        display: block;
+        display: none;
     }
 
     /* Hero */
