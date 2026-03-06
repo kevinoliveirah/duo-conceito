@@ -225,6 +225,116 @@ img {
     align-items: center;
 }
 
+/* Hamburger Button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 200;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--dark);
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile Nav Overlay */
+.mobile-nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.active {
+    opacity: 1;
+}
+
+/* Mobile Nav Drawer */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: min(300px, 85vw);
+    height: 100vh;
+    background: var(--white);
+    z-index: 160;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 32px 40px;
+    gap: 8px;
+    transition: right 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+}
+
+.mobile-nav.active {
+    right: 0;
+}
+
+.mobile-nav-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--dark);
+    transition: var(--transition);
+}
+
+.mobile-nav-close:hover {
+    background: var(--primary-bg);
+    color: var(--primary);
+}
+
+.mobile-nav-link {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: var(--transition);
+}
+
+.mobile-nav-link:hover {
+    color: var(--primary);
+    padding-left: 8px;
+}
+
 .nav-link {
     font-weight: 600;
     font-size: 0.95rem;
@@ -930,8 +1040,16 @@ textarea.invalid {
 
     /* Header */
     .header-nav,
-    .header .btn-outline {
+    .header-cta {
         display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .mobile-nav-overlay {
+        display: block;
     }
 
     /* Hero */

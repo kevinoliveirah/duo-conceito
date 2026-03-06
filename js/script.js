@@ -1,3 +1,29 @@
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+    const nav = document.getElementById('mobileNav');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const btn = document.getElementById('hamburgerBtn');
+    const isOpen = nav.classList.contains('active');
+    if (isOpen) {
+        closeMobileMenu();
+    } else {
+        nav.classList.add('active');
+        overlay.classList.add('active');
+        btn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeMobileMenu() {
+    const nav = document.getElementById('mobileNav');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const btn = document.getElementById('hamburgerBtn');
+    nav.classList.remove('active');
+    overlay.classList.remove('active');
+    btn.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Reveal Animations on Scroll
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };

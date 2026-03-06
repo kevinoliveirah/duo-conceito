@@ -66,16 +66,38 @@
                 <span><span class="logo-duo">Duo</span> <span class="logo-conceito">Conceito</span></span>
             </a>
 
-            <nav class="header-nav">
-                <a href="#briefing" class="nav-link">Iniciar Projeto</a>
-                <a href="#galeria" class="nav-link">Ambientes</a>
-                <a href="#avaliacoes" class="nav-link">Avaliações</a>
-                <a href="#sobre" class="nav-link">Quem Somos</a>
+            <nav class="header-nav" id="headerNav">
+                <a href="#briefing" class="nav-link" onclick="closeMobileMenu()">Iniciar Projeto</a>
+                <a href="#galeria" class="nav-link" onclick="closeMobileMenu()">Ambientes</a>
+                <a href="#avaliacoes" class="nav-link" onclick="closeMobileMenu()">Avaliações</a>
+                <a href="#sobre" class="nav-link" onclick="closeMobileMenu()">Quem Somos</a>
             </nav>
 
-            <a href="#briefing" class="btn btn-outline" style="padding: 10px 20px; font-size: 0.9rem;">Fale Conosco</a>
+            <a href="#briefing" class="btn btn-outline header-cta" style="padding: 10px 20px; font-size: 0.9rem;">Fale
+                Conosco</a>
+
+            <!-- Botão Hambúrguer -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
+
+    <!-- Menu Mobile Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+    <nav class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" onclick="closeMobileMenu()" aria-label="Fechar menu">
+            <i class="ph ph-x"></i>
+        </button>
+        <a href="#briefing" class="mobile-nav-link" onclick="closeMobileMenu()">Iniciar Projeto</a>
+        <a href="#galeria" class="mobile-nav-link" onclick="closeMobileMenu()">Ambientes</a>
+        <a href="#avaliacoes" class="mobile-nav-link" onclick="closeMobileMenu()">Avaliações</a>
+        <a href="#sobre" class="mobile-nav-link" onclick="closeMobileMenu()">Quem Somos</a>
+        <a href="#briefing" class="btn btn-primary" onclick="closeMobileMenu()"
+            style="margin-top: 16px; width: 100%; justify-content: center;">Fale Conosco</a>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
