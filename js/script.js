@@ -315,97 +315,9 @@ function initGalleryFilters() {
     });
 }
 
-function escapeHtml(value) {
-    if (typeof value !== 'string') return '';
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function truncateText(value, maxLength) {
-    if (typeof value !== 'string') return '';
-    if (value.length <= maxLength) return value;
-    return value.slice(0, maxLength).trimEnd() + '...';
-}
-
-function formatRatingValue(value) {
-    const numeric = Number(value);
-    if (!Number.isFinite(numeric)) return '';
-    return numeric.toFixed(1).replace('.', ',');
-}
-
-function buildReviewStars(rating) {
-    const rounded = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
-    let html = '';
-
-    for (let i = 0; i < 5; i += 1) {
-        html += i < rounded ? '<i class="ph-fill ph-star"></i>' : '<i class="ph ph-star"></i>';
-    }
-
-    return html;
-}
-
-function buildDynamicReviewCard(review, index) {
-    const author = escapeHtml(review && review.author_name ? review.author_name : 'Cliente');
-    const text = escapeHtml(truncateText(review && review.text ? review.text : '', 280));
-    const timeLabel = escapeHtml(review && review.relative_time_description ? review.relative_time_description : '');
-    const ratingLabel = formatRatingValue(review && review.rating ? review.rating : 0) || '5,0';
-    return `
-        <div class="review-card">
-            <div class="review-stars">
-                ${buildReviewStars(review && review.rating ? review.rating : 0)}
-            </div>
-            <div class="review-content">
-                <p>"${text}"</p>
-            </div>
-            <div class="review-author">
-                <div class="review-author-info">
-                    <h4>${author}</h4>
-                    <span>${ratingLabel} estrelas${timeLabel ? ` • ${timeLabel}` : ''}</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-async function initGoogleReviews() {
-    const reviewsGrid = document.getElementById('reviewsGrid');
-    if (!reviewsGrid) return;
-
-    try {
-        const response = await fetch('/api/reviews', {
-            headers: { Accept: 'application/json' }
-        });
-
-        if (!response.ok) return;
-        const payload = await response.json();
-        if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) return;
-
-        reviewsGrid.innerHTML = payload.reviews.map((review, index) => buildDynamicReviewCard(review, index)).join('');
-
-        const badgeText = document.getElementById('googleReviewBadgeText');
-        const ratingValue = Number(payload.rating);
-        const totalReviews = Number(payload.total_reviews);
-        if (badgeText && Number.isFinite(ratingValue) && Number.isFinite(totalReviews)) {
-            badgeText.textContent = `Avaliacao ${ratingValue.toFixed(1).replace('.', ',')} no Google (${totalReviews})`;
-        }
-
-        const reviewsLink = document.getElementById('googleReviewsLink');
-        if (reviewsLink && payload.google_maps_url) {
-            reviewsLink.href = payload.google_maps_url;
-        }
-    } catch (error) {
-        console.warn('Nao foi possivel carregar avaliacoes em tempo real.', error);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     bindMobileMenuEvents();
     closeMobileMenu();
-    initGoogleReviews();
     initRevealAnimations();
     initFaqAccordion();
     initBriefingForm();
