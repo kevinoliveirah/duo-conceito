@@ -1,6 +1,14 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/reviews"
+  to = "/.netlify/functions/google-reviews"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
