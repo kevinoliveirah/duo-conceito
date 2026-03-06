@@ -912,16 +912,29 @@ textarea.invalid {
     color: white;
 }
 
-/* Responsive basics */
+/* ============================================
+   RESPONSIVIDADE — TABLET (max 992px)
+   ============================================ */
 @media (max-width: 992px) {
     .container {
         padding: 0 20px;
     }
 
     .section-padding {
-        padding: 60px 0;
+        padding: 72px 0;
     }
 
+    .section-header h2 {
+        font-size: 2rem;
+    }
+
+    /* Header */
+    .header-nav,
+    .header .btn-outline {
+        display: none;
+    }
+
+    /* Hero */
     .hero-wrapper,
     .about-wrapper {
         grid-template-columns: 1fr;
@@ -929,12 +942,18 @@ textarea.invalid {
         text-align: center;
     }
 
+    .hero {
+        padding: 120px 0 72px;
+        min-height: auto;
+    }
+
     .hero-content h1 {
-        font-size: 3rem;
+        font-size: 2.8rem;
     }
 
     .hero-content p {
         margin: 0 auto 32px;
+        max-width: 100%;
     }
 
     .hero-actions {
@@ -942,42 +961,170 @@ textarea.invalid {
     }
 
     .image-showcase {
-        height: 400px;
+        height: 350px;
     }
 
+    .image-showcase-alt {
+        height: 300px;
+    }
+
+    /* About — reorder image below text on tablet */
+    .about-wrapper {
+        direction: ltr;
+    }
+
+    .about-image {
+        order: -1;
+    }
+
+    .about-content {
+        text-align: left;
+    }
+
+    /* Features */
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
+    /* Gallery */
     .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    /* Reviews */
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .footer-info {
+        grid-column: span 2;
+    }
 }
 
+/* ============================================
+   RESPONSIVIDADE — MOBILE (max 768px)
+   ============================================ */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .section-padding {
+        padding: 56px 0;
+    }
+
+    .section-header {
+        margin-bottom: 32px;
+    }
+
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+        padding: 110px 0 56px;
+    }
+
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        letter-spacing: -0.5px;
     }
 
-    .features-grid,
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-item {
-        height: 250px;
+    .hero-content p {
+        font-size: 1rem;
     }
 
     .hero-actions {
         flex-direction: column;
         width: 100%;
+        gap: 12px;
     }
 
     .hero-actions .btn {
         width: 100%;
+        justify-content: center;
     }
 
+    .image-showcase {
+        height: 280px;
+    }
+
+    /* About */
+    .about-content h2 {
+        font-size: 1.75rem;
+    }
+
+    .about-content {
+        text-align: left;
+    }
+
+    .about-list li {
+        font-size: 1rem;
+    }
+
+    /* Features */
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .feature-card {
+        padding: 28px 24px;
+    }
+
+    /* Gallery */
+    .gallery-filters {
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .gallery-item {
+        height: 240px;
+    }
+
+    /* Reviews */
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .review-card {
+        padding: 28px 24px;
+    }
+
+    .google-review-badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    /* FAQ */
+    .faq-question {
+        font-size: 1rem;
+        padding: 18px 16px;
+    }
+
+    /* Form */
     .form-grid {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -988,22 +1135,38 @@ textarea.invalid {
     }
 
     .checkbox-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
     }
 
     .briefing-box {
-        padding: 24px;
+        padding: 24px 20px;
     }
 
     .form-actions {
         flex-direction: column-reverse;
-        gap: 16px;
+        gap: 12px;
     }
 
     .form-actions .btn {
         width: 100%;
     }
 
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .footer-info {
+        grid-column: span 1;
+    }
+
+    .footer {
+        padding: 56px 0 0;
+    }
+
+    /* WhatsApp Float */
     .floating-wpp span {
         display: none;
     }
@@ -1015,6 +1178,42 @@ textarea.invalid {
         right: 20px;
     }
 }
+
+/* ============================================
+   RESPONSIVIDADE — EXTRA PEQUENO (max 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.9rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-nav ul li a,
+    .footer-contact ul li {
+        font-size: 0.9rem;
+    }
+
+    .review-card {
+        padding: 24px 18px;
+    }
+
+    .btn {
+        font-size: 0.95rem;
+        padding: 14px 24px;
+    }
+}
+
 /* Reviews Section */
 .reviews-grid {
     display: grid;
@@ -1090,6 +1289,7 @@ textarea.invalid {
     color: #4285F4;
     font-size: 1.1rem;
 }
+
 /* Reviews Footer */
 .reviews-footer {
     border-top: 1px solid var(--gray-100);
@@ -1097,7 +1297,18 @@ textarea.invalid {
     margin-top: 60px;
 }
 
-.mb-md { margin-bottom: 16px; }
-.mb-lg { margin-bottom: 24px; }
-.mt-lg { margin-top: 24px; }
-.text-center { text-align: center; }
+.mb-md {
+    margin-bottom: 16px;
+}
+
+.mb-lg {
+    margin-bottom: 24px;
+}
+
+.mt-lg {
+    margin-top: 24px;
+}
+
+.text-center {
+    text-align: center;
+}
