@@ -166,9 +166,63 @@ function initFaqAccordion() {
     });
 }
 
+const WHATSAPP_PHONE = '5515991219995';
+
+function repairMojibake(text) {
+    if (typeof text !== 'string' || !text) return text;
+    if (!/[\u00C3\u00C2]/.test(text)) return text;
+
+    try {
+        return decodeURIComponent(escape(text));
+    } catch (error) {
+        return text;
+    }
+}
+
+function getTrimmedValue(id) {
+    const element = document.getElementById(id);
+    return element && typeof element.value === 'string' ? element.value.trim() : '';
+}
+
+function getSelectText(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select || select.selectedIndex < 0) return '';
+    const option = select.options[select.selectedIndex];
+    return repairMojibake(option ? option.text : '');
+}
+
+function openWhatsAppWithFallback(message) {
+    const text = encodeURIComponent(message || '');
+    const appUrl = `whatsapp://send?phone=${WHATSAPP_PHONE}&text=${text}`;
+    const apiUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${text}`;
+    const webUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${text}`;
+
+    const ua = navigator.userAgent || '';
+    const isTouchMac = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
+    const isMobileDevice =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone/i.test(ua) || isTouchMac;
+
+    if (isMobileDevice) {
+        window.location.assign(appUrl);
+        window.setTimeout(() => {
+            if (document.visibilityState === 'visible') window.location.assign(apiUrl);
+        }, 650);
+        window.setTimeout(() => {
+            if (document.visibilityState === 'visible') window.location.assign(webUrl);
+        }, 1400);
+        return;
+    }
+
+    const popup = window.open(webUrl, '_blank', 'noopener,noreferrer');
+    if (!popup) {
+        window.location.assign(webUrl);
+    }
+}
+
 function initBriefingForm() {
     const form = document.getElementById('briefingForm');
     if (!form) return;
+    form.noValidate = true;
 
     const steps = Array.from(document.querySelectorAll('.form-step'));
     const stepIndicators = Array.from(document.querySelectorAll('.step-indicator'));
@@ -207,8 +261,13 @@ function initBriefingForm() {
         let valid = true;
 
         inputs.forEach(input => {
-            const errorMsg = input.parentElement ? input.parentElement.querySelector('.error-msg') : null;
-            const isInvalid = !input.value.trim() || (input.type === 'checkbox' && !input.checked);
+            let errorMsg = input.parentElement ? input.parentElement.querySelector('.error-msg') : null;
+            if (!errorMsg && input.id === 'lgpd') {
+                errorMsg = document.getElementById('lgpdError');
+            }
+            const value = typeof input.value === 'string' ? input.value.trim() : '';
+            const hasValue = input.type === 'checkbox' ? input.checked : value.length > 0;
+            const isInvalid = !hasValue || !input.checkValidity();
 
             input.classList.toggle('invalid', isInvalid);
             if (errorMsg) errorMsg.style.display = isInvalid ? 'block' : 'none';
@@ -241,43 +300,34 @@ function initBriefingForm() {
         });
     });
 
-    form.addEventListener('submit', (e) => {
+    function handleBriefingSubmit(e) {
         e.preventDefault();
         if (!validateStep(currentStep)) return;
 
-        const nome = document.getElementById('nome') ? document.getElementById('nome').value : '';
-        const telefone = document.getElementById('telefone') ? document.getElementById('telefone').value : '';
-        const cep = document.getElementById('cep') ? document.getElementById('cep').value : '';
-        const tipoImovelSelect = document.getElementById('tipoImovel');
-        const faseObraSelect = document.getElementById('faseObra');
-        const investimentoSelect = document.getElementById('investimento');
-        const prazoSelect = document.getElementById('prazo');
-        const pagamentoInput = document.getElementById('pagamento');
-        const observacoesInput = document.getElementById('observacoes');
-
-        const tipoImovel = tipoImovelSelect ? tipoImovelSelect.options[tipoImovelSelect.selectedIndex].text : '';
-        const faseObra = faseObraSelect ? faseObraSelect.options[faseObraSelect.selectedIndex].text : '';
-        const investimento = investimentoSelect ? investimentoSelect.options[investimentoSelect.selectedIndex].text : '';
-        const prazo = prazoSelect ? prazoSelect.options[prazoSelect.selectedIndex].text : '';
-        const pagamento = pagamentoInput && pagamentoInput.value ? pagamentoInput.value : 'NÃ£o informado';
-        const observacoes = observacoesInput && observacoesInput.value ? observacoesInput.value : 'Nenhuma observaÃ§Ã£o';
-
+        const nome = repairMojibake(getTrimmedValue('nome'));
+        const telefone = getTrimmedValue('telefone');
+        const cep = getTrimmedValue('cep');
+        const tipoImovel = getSelectText('tipoImovel');
+        const faseObra = getSelectText('faseObra');
+        const investimento = getSelectText('investimento');
+        const prazo = getSelectText('prazo');
+        const pagamento = repairMojibake(getTrimmedValue('pagamento') || 'Não informado');
+        const observacoes = repairMojibake(getTrimmedValue('observacoes') || 'Nenhuma observação');
         const ambientesElements = document.querySelectorAll('input[name="ambiente"]:checked');
-        const ambientes = Array.from(ambientesElements).map(cb => cb.value).join(', ');
+        const ambientes = Array.from(ambientesElements).map(cb => repairMojibake(cb.value)).join(', ');
 
-        let msg = `OlÃ¡, Duo Conceito! Meu nome Ã© *${nome}* e gostaria de um orÃ§amento para mÃ³veis planejados.\n\n`;
-        msg += `*ImÃ³vel:* ${tipoImovel} (${faseObra})\n`;
+        let msg = `Olá, Duo Conceito! Meu nome é *${nome}* e gostaria de um orçamento para móveis planejados.\n\n`;
+        msg += `*Imóvel:* ${tipoImovel} (${faseObra})\n`;
         msg += `*CEP:* ${cep}\n`;
         msg += `*Ambientes:* ${ambientes}\n`;
         msg += `*Investimento Previsto:* ${investimento}\n`;
         msg += `*Prazo para Fechamento:* ${prazo}\n`;
         msg += `*Pagamento Ideal:* ${pagamento}\n\n`;
-        msg += `*ObservaÃ§Ãµes Extras:*\n${observacoes}\n\n`;
+        msg += `*Observações Extras:*\n${observacoes}\n\n`;
         msg += `Meu WhatsApp para contato: ${telefone}\n`;
         msg += `Aguardo o retorno!`;
 
-        const wppUrl = `https://wa.me/5515991219995?text=${encodeURIComponent(msg)}`;
-        window.open(wppUrl, '_blank');
+        openWhatsAppWithFallback(msg);
 
         const stepper = document.querySelector('.stepper');
         const sectionHeader = document.querySelector('.briefing-box .section-header');
@@ -287,7 +337,9 @@ function initBriefingForm() {
         if (stepper) stepper.style.display = 'none';
         if (sectionHeader) sectionHeader.style.display = 'none';
         if (formSuccess) formSuccess.style.display = 'block';
-    });
+    }
+
+    form.addEventListener('submit', handleBriefingSubmit);
 }
 
 function initGalleryFilters() {
@@ -323,3 +375,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initBriefingForm();
     initGalleryFilters();
 });
+
